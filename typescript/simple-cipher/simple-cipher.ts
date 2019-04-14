@@ -16,8 +16,8 @@ class SimpleCipher {
     }
 
     constructor(key: string = SimpleCipher.generate_random_key()) {
-        if (!key || key.toLowerCase() !== key || (/\d/.test(key))) {
-            throw new Error('Bad key')
+        if (!(/^[a-z]+$/.test(key))) {
+            throw new Error('Bad key: ' + key)
         }
         this.key = key
     }

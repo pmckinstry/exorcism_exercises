@@ -6,7 +6,7 @@ class SimpleCipher {
 
     readonly key: string
 
-    static generate_random_key() {
+    private static generate_random_key() {
         let key = ''
         while (key.length < DEFAULT_KEY_SIZE) {
             const next = Math.floor(Math.random() * ALPHABET_LENGTH) + LOWER_A_CHARACTER_CODE
@@ -25,7 +25,7 @@ class SimpleCipher {
     encode = (input: string): string => this.transform(input, 1)
     decode = (input: string): string => this.transform(input, -1)
 
-    transform(message: string, direction: number) {
+    private transform(message: string, direction: number) {
         let result = ''
         for (let i = 0; i < message.length; ++i) {
             const code = message.charCodeAt(i)

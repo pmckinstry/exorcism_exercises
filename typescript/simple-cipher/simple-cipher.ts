@@ -1,10 +1,15 @@
+const LOWER_A_CHARACTER_CODE = 'a'.charCodeAt(0)
+const ALPHABET_LENGTH = 26
+const DEFAULT_KEY_SIZE = 100
+
 class SimpleCipher {
-    key: string
+
+    readonly key: string
 
     static generate_random_key() {
         let key = ''
-        while (key.length < 100) {
-            const next = Math.floor(Math.random() * 26) + 97
+        while (key.length < DEFAULT_KEY_SIZE) {
+            const next = Math.floor(Math.random() * ALPHABET_LENGTH) + LOWER_A_CHARACTER_CODE
             key += String.fromCharCode(next)
         }
         return key
@@ -17,28 +22,20 @@ class SimpleCipher {
         this.key = key
     }
 
-    encode(message: string) {
+    encode = (input: string): string => this.transform(input, 1)
+    decode = (input: string): string => this.transform(input, -1)
+
+    transform(message: string, direction: number) {
         let result = ''
         for (let i = 0; i < message.length; ++i) {
             const code = message.charCodeAt(i)
-            const shift = this.key.charCodeAt(i % this.key.length) - 97 // 'a' shifts 0 digits
-            const shifted_value = ((code - 97 + shift) % 26) + 97 // overflow z=>a
+            const shift = this.key.charCodeAt(i % this.key.length) - LOWER_A_CHARACTER_CODE // 'a' shifts 0 digits
+            const shifted_value = ((code - LOWER_A_CHARACTER_CODE + (direction * shift) + ALPHABET_LENGTH) % ALPHABET_LENGTH) + LOWER_A_CHARACTER_CODE // overflow z=>a
             result += String.fromCharCode(shifted_value)
         }
         return result
     }
 
-    decode(message: string) {
-        let result = ''
-        for (let i = 0; i < message.length; ++i) {
-            const code = message.charCodeAt(i)
-            const shift = this.key.charCodeAt(i % this.key.length) - 97 // 'a' shifts 0 digits
-            let shifted_value = ((code - 97 - shift) % 26) + 97 // overflow z=>a
-            if (shifted_value < 97) { shifted_value += 26 }
-            result += String.fromCharCode(shifted_value)
-        }
-        return result
-    }
 }
 
 export default SimpleCipher
